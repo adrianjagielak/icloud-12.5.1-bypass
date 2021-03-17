@@ -34,11 +34,6 @@ read -p 'Press enter when you finish'
 
 echo ''
 
-echo 'Continue to the "Activation Lock" screen'
-read -p 'Press enter to continue'
-
-echo ''
-
 # Remove known_hosts file
 rm ~/.ssh/known_hosts > /dev/null 2>&1
 
