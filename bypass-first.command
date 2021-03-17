@@ -39,10 +39,7 @@ read -p 'Press enter to continue'
 
 echo ''
 
-# Remove known_hosts file
-rm ~/.ssh/known_hosts > /dev/null 2>&1
-
-echo 'Starting iproxy'
+echo 'Starting iproxy...'
 
 # Run iproxy in the background
 iproxy 2222:44 > /dev/null 2>&1 &
@@ -54,33 +51,30 @@ while true ; do
 
   if [ -z "$result" ] ; then
 
-# Just so the known_hosts warning is above the 8 steps
-sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no root@localhost -p 2222 ls > /dev/null 2>&1
-
 echo '(1/7) Mounting filesystem as read-write'
-sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no root@localhost -p 2222 mount -o rw,union,update /
+sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222 mount -o rw,union,update / > /dev/null 2>&1
 
 echo '(2/7) Unloading original mobileactivationd'
-sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no root@localhost -p 2222 launchctl unload /System/Library/LaunchDaemons/com.apple.mobileactivationd.plist
+sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222 launchctl unload /System/Library/LaunchDaemons/com.apple.mobileactivationd.plist > /dev/null 2>&1
 
 sleep 2
 
 echo '(3/7) Removing original mobileactivationd'
-sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no root@localhost -p 2222 rm /usr/libexec/mobileactivationd
+sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222 rm /usr/libexec/mobileactivationd > /dev/null 2>&1
 
 echo '(4/7) Running uicache (this can take a few seconds)'
-sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no root@localhost -p 2222 uicache --all
+sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222 uicache --all > /dev/null 2>&1
 
 sleep 2
 
 echo '(5/7) Copying patched mobileactivationd'
-sshpass -p 'alpine' scp -P 2222 mobileactivationd_12_5_1_patched root@localhost:/usr/libexec/mobileactivationd
+sshpass -p 'alpine' scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 2222 mobileactivationd_12_5_1_patched root@localhost:/usr/libexec/mobileactivationd > /dev/null 2>&1
 
 echo '(6/7) Changing patched mobileactivationd access permissions'
-sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no root@localhost -p 2222 chmod 755 /usr/libexec/mobileactivationd
+sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222 chmod 755 /usr/libexec/mobileactivationd > /dev/null 2>&1
 
 echo '(7/7) Loading patched mobileactivationd'
-sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no root@localhost -p 2222 launchctl load /System/Library/LaunchDaemons/com.apple.mobileactivationd.plist
+sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222 launchctl load /System/Library/LaunchDaemons/com.apple.mobileactivationd.plist > /dev/null 2>&1
 
 sleep 2
 
