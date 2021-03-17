@@ -14,3 +14,5 @@ if your device was already bypassed and you just rebooted) and follow the instru
 3. Enjoy your unlocked iDevice :) If you succeed please let me know
 [opening an issue with your device model and iOS version](https://github.com/adrianjagielak/icloud-12.5.1-bypass/issues/new).
 so I can add them to this Readme as tested. Thanks :)
+
+![Screenshot](https://github.com/adrianjagielak/icloud-12.5.1-bypass/blob/master/screenshot.png?raw=true)
