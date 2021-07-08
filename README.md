@@ -1,8 +1,8 @@
-# iCloud Activation iOS 12.5.1 bypass (macOS)
+# iCloud Activation iOS 12.5.4 bypass (macOS)
 
-Reliable iCloud Activation iOS 12.5.1 bypass working 100% of the time for macOS
+Reliable iCloud Activation iOS 12.5.4 bypass working 100% of the time for macOS
 (tested on two A7 iPhones 5s) (should work for any "late" iOS 12 (12.4+ I guess?
-I tested it only on 12.5.1 as there is no point in having older iOS 12 on A7 devices))
+I tested it only on the last available iOS 12 version as there is no point in having older iOS 12 on A7 devices))
 
 ## Running the bypass script
 
