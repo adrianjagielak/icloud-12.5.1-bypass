@@ -6,26 +6,57 @@ echo ''
 echo ''
 
 # Change the current working directory
-cd "`dirname "$0"`"
+script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+cd "$script_dir"
 
-# Check for Homebrew, install if we don't have it
-if test ! $(which brew); then
-    echo "Installing homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null 2>&1
-    echo ''
-fi
+ensure_brew() {
+    if command -v brew >/dev/null 2>&1; then
+        return 0
+    fi
+
+    for brew_path in "/opt/homebrew/bin/brew" "/usr/local/bin/brew"; do
+        if [ -x "$brew_path" ]; then
+            eval "$($brew_path shellenv)"
+            return 0
+        fi
+    done
+
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null 2>&1 || {
+        echo "Homebrew installation failed. Please install it manually: https://brew.sh/" >&2
+        exit 1
+    }
+
+    for brew_path in "/opt/homebrew/bin/brew" "/usr/local/bin/brew"; do
+        if [ -x "$brew_path" ]; then
+            eval "$($brew_path shellenv)"
+            return 0
+        fi
+    done
+
+    echo "Homebrew was installed but is not available in PATH." >&2
+    exit 1
+}
+
+ensure_brew
 
 # Check for sshpass, install if we don't have it
-if test ! $(which sshpass); then
+if ! command -v sshpass >/dev/null 2>&1; then
     echo "Installing sshpass..."
-    brew install esolitos/ipa/sshpass > /dev/null 2>&1
+    brew install --quiet esolitos/ipa/sshpass > /dev/null 2>&1 || {
+        echo "Failed to install sshpass. Please install it manually." >&2
+        exit 1
+    }
     echo ''
 fi
 
 # Check for iproxy, install if we don't have it
-if test ! $(which iproxy); then
+if ! command -v iproxy >/dev/null 2>&1; then
     echo "Installing iproxy..."
-    brew install libimobiledevice > /dev/null 2>&1
+    brew install --quiet libimobiledevice > /dev/null 2>&1 || {
+        echo "Failed to install libimobiledevice. Please install it manually." >&2
+        exit 1
+    }
     echo ''
 fi
 
