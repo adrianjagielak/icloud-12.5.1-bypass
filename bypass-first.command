@@ -99,7 +99,7 @@ sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/n
 sleep 2
 
 echo '(5/7) Copying patched mobileactivationd'
-sshpass -p 'alpine' scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 2222 mobileactivationd_12_5_1_patched root@localhost:/usr/libexec/mobileactivationd > /dev/null 2>&1
+sshpass -p 'alpine' scp -O -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 2222 mobileactivationd_12_5_1_patched root@localhost:/usr/libexec/mobileactivationd > /dev/null 2>&1
 
 echo '(6/7) Changing patched mobileactivationd access permissions'
 sshpass -p 'alpine' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222 chmod 755 /usr/libexec/mobileactivationd > /dev/null 2>&1
